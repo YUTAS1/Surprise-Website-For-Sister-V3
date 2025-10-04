@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Surprise v3 | Aoudumber Bade">
+    <meta name="github" content="https://github.com/Aoudumber-Bade">
+    <title>Surprise For Sister v3 | Aoudumber Bade</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="img/flowers.png" type="image/x-icon">
+    <script
+    src="https://kit.fontawesome.com/2e95d79f91.js"
+    crossorigin="anonymous"
+  ></script>
+
+</head>
+
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <!-- Background Music -->
+    <audio id="background-music" loop>
+        <source src="https://github.com/YUTAS1/Surprise-Website-For-Sister-V3/blob/231d5847918c63b61c8c0f4b43cccaa8d6ceb93b/Tu%20hain%20toh%20-%20Mr.%20%26%20Mrs.%20mahi%20%20WhatsApp%20Status%20%20%23song%20-%20MISS%20GLORIOUS.mp3?raw=true" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="greetings">
+        <span>G</span>
+        <span>U</span>
+        <span>N</span>
+        <span>G</span>
+        <span>U</span>
+        <span>N</span>
+    </div>
+    <div style="text-align: center;" class="description">
+        <span>For you my long distance bestie <i class="fa-solid fa-heart"></i></span>
+    </div>
+     <!-- Button -->
+  <div style="position: absolute; top: 67vh; width: 100%; display: flex; justify-content: center;">
+    <a href="./flowers.html" class="btn">
+      <span class="text">Open Here</span>
+    </a>
+  </div>
+
+  <!-- Music Control Button -->
+  <div style="position: absolute; top: 80vh; width: 100%; display: flex; justify-content: center;">
+    <button id="music-toggle" style="background: #ff4081; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-family: Arial, sans-serif;">
+        <i class="fa-solid fa-volume-high"></i> Play Music
+    </button>
+  </div>
+
+  <script>
+    // Music control functionality
+    const music = document.getElementById('background-music');
+    const toggleButton = document.getElementById('music-toggle');
+    let isPlaying = false;
+
+    // Function to toggle music
+    function toggleMusic() {
+        if (isPlaying) {
+            music.pause();
+            toggleButton.innerHTML = '<i class="fa-solid fa-volume-high"></i> Play Music';
+        } else {
+            music.play().catch(error => {
+                console.log("Autoplay blocked:", error);
+                // If autoplay is blocked, wait for user interaction
+                document.addEventListener('click', function startMusic() {
+                    music.play();
+                    document.removeEventListener('click', startMusic);
+                }, { once: true });
+            });
+            toggleButton.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Pause Music';
+        }
+        isPlaying = !isPlaying;
+    }
+
+    // Add click event to toggle button
+    toggleButton.addEventListener('click', toggleMusic);
+
+    // Auto-start music (might be blocked by browsers)
+    window.addEventListener('load', function() {
+        // Try to play music automatically
+        music.play().then(() => {
+            isPlaying = true;
+            toggleButton.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Pause Music';
+        }).catch(error => {
+            console.log("Autoplay blocked, waiting for user interaction");
+            isPlaying = false;
+        });
+    });
+
+    // Save music state when leaving page
+    window.addEventListener('beforeunload', function() {
+        if (isPlaying) {
+            localStorage.setItem('musicTime', music.currentTime);
+            localStorage.setItem('musicPlaying', 'true');
+        } else {
+            localStorage.setItem('musicPlaying', 'false');
+        }
+    });
+
+    // Restore music state when returning to page
+    window.addEventListener('load', function() {
+        const savedTime = localStorage.getItem('musicTime');
+        const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
+        
+        if (savedTime) {
+            music.currentTime = parseFloat(savedTime);
+        }
+        
+        if (wasPlaying) {
+            toggleMusic();
+        }
+    });
+  </script>
+</body>
+
+</html> 
